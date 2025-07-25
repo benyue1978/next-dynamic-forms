@@ -1,0 +1,95 @@
+# Next Dynamic Forms
+
+A modern, configuration-driven dynamic form system for React and Next.js applications.
+
+## Features
+
+- 🚀 **Zero Configuration** - Get started with simple JSON configurations
+- 🎯 **Framework Agnostic** - Works with any React framework
+- 🌍 **I18n Support** - Built-in internationalization with `next-intl`
+- 🎨 **Custom Styling** - Fully customizable UI components
+- 🔧 **TypeScript First** - Full TypeScript support with strict types
+- 📱 **Responsive** - Mobile-first responsive design
+- ⚡ **Performance** - Optimized for modern web applications
+
+## Quick Start
+
+### Installation
+
+```bash
+npm install @benyue1978/next-dynamic-forms
+```
+
+### Basic Usage
+
+```tsx
+import { createBasicAdapter } from '@benyue1978/next-dynamic-forms'
+import { Input, Textarea, Label, Button } from '@/components/ui'
+
+const uiComponents = { Input, Textarea, Label, Button }
+const BasicForm = createBasicAdapter(uiComponents)
+
+function MyForm() {
+  return (
+    <BasicForm
+      config={formConfig}
+      currentStepIndex={0}
+      formData={data}
+      onDataChange={setData}
+      onNext={handleNext}
+      onPrevious={handlePrevious}
+      isFirstStep={true}
+      isLastStep={false}
+    />
+  )
+}
+```
+
+### Next.js Integration
+
+For Next.js applications with `next-intl`:
+
+```tsx
+import { createNextJSAdapter } from '@benyue1978/next-dynamic-forms'
+
+const NextJSForm = createNextJSAdapter(uiComponents)
+```
+
+## Configuration Format
+
+Forms are defined using simple JSON configurations:
+
+```json
+{
+  "id": "contact-form",
+  "templateName": "contact",
+  "steps": [
+    {
+      "id": "basic-info",
+      "title": "Basic Information",
+      "description": "Please provide your contact details",
+      "fields": [
+        {
+          "name": "name",
+          "type": "input",
+          "label": "Full Name",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "input",
+          "label": "Email Address",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Next Steps
+
+- [Getting Started](/getting-started) - Set up your first form
+- [API Reference](/api) - Explore all available options
+- [Examples](/examples) - See real-world usage patterns
+- [Playground](/playground) - Try it live in your browser

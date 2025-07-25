@@ -1,0 +1,40 @@
+# Interactive Playground
+
+Try the Next Dynamic Forms library live in your browser! Experiment with different configurations and see the results in real-time.
+
+import { Playground } from '@/components/playground'
+
+## Live Playground
+
+The playground below uses Sandpack to provide a fully functional React environment where you can modify the code and see instant updates.
+
+<Playground />
+
+## URL Parameters
+
+You can load custom configurations using URL parameters:
+
+- **Base64 encoded source**: `/playground?src=base64encodedcode`
+- **Preset demos**: `/playground?demo=basic-form`
+
+### Example URLs
+
+```
+/playground?demo=nextjs-integration
+/playground?src=ZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gTXlGb3JtKCkgeyByZXR1cm4gPHA+SGVsbG8gV29ybGQ8L3A+IH0=
+```
+
+## Available Demos
+
+- [Basic Form](?demo=basic-form) - Simple contact form
+- [Next.js Integration](?demo=nextjs-integration) - Full Next.js example
+- [Custom Styling](?demo=custom-styling) - Styled components
+- [Multi-step Form](?demo=multi-step) - Complex multi-step form
+
+## Share Your Configuration
+
+Once you've created a configuration in the playground, you can share it by:
+
+1. Copying the URL with base64 encoded source
+2. Using the "Share" button to generate a shareable link
+3. Saving to local storage for later use

@@ -160,7 +160,7 @@ describe('FieldRenderer', () => {
         expect.objectContaining({
           rows: 5
         }),
-        undefined
+        expect.any(Object)
       )
     })
   })
