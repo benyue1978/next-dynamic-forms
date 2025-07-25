@@ -1,0 +1,84 @@
+---
+description: project overview
+alwaysApply: false
+---
+# .cursor/rules/project.mdc
+
+project: next-dynamic-forms
+owner: benyue1978
+package: "@benyue1978/next-dynamic-forms"
+
+description: |
+  A dynamic form component library built with React and designed to run in Next.js projects.
+  This project includes the component code, demo examples, interactive documentation (using Nextra),
+  and an optional playground for live code editing. The documentation displays real code from the demo directory
+  to ensure accuracy and maintainability.
+
+structure:
+  type: monorepo
+  tools: [next.js, react, pnpm, turborepo]
+  layout:
+    - apps/docs: Nextra-powered documentation site with .mdx files, iframe demo embedding, and code linking
+    - apps/demo: a standalone playground or testbed for form behavior and internal validation
+    - packages/dynamic-form: core component library, exported as @benyue1978/next-dynamic-forms
+    - demo-snippets: source files shared between demo rendering and documentation code blocks
+
+standards:
+  language: TypeScript
+  style: Tailwind CSS + CSS variables (exposed for theme customization)
+  components: support className override and optional ThemeProvider
+  schema: support JSON schema-like structure for dynamic form definition
+
+testing:
+
+- unit: in `packages/next-dynamic-forms/test`
+- visual: via Storybook or embedded demos (optional)
+- demo verification: apps/demo must remain synced with demo-snippets and docs references
+
+documentation:
+  system: Nextra with theme config
+  format: `.mdx` with embedded code and iframe
+  code-block-source: demo-snippets/*.tsx loaded via raw-loader or fs
+  demo-display: iframe (`/demos/[slug]`) or direct link from docs
+  playground: optional `/playground` page with Sandpack or Monaco editor
+
+build:
+  build-tool: tsup
+  output-dir: dist
+  exports:
+    - ESM: dist/index.js
+    - Types: dist/index.d.ts
+
+npm:
+  registry: <https://registry.npmjs.org/>
+  scope: "@benyue1978"
+  public: true
+  publish:
+    - command: pnpm publish --access public --filter @benyue1978/next-dynamic-forms
+    - trigger: git tag push starting with `v*`
+    - automation: via GitHub Actions using NPM_TOKEN
+
+automation:
+  actions:
+    - .github/workflows/release.yml: auto-publish on tag
+    - tag pattern: v0.1.0, v1.0.0, etc.
+
+documentation-style:
+
+- one .mdx file per topic
+- real demo code included in code blocks
+- iframe for visual preview
+- encourage linking back to demo pages
+- optional “Try in Playground” links via base64 encoding
+
+output:
+
+- published npm package
+- public docs site (Vercel hosted)
+- optionally open-source GitHub repo
+
+notes:
+
+- keep demo-snippets as single source of truth for all doc/demo code
+- avoid style duplication: CSS vars and Tailwind preferred
+- only React is supported currently; multi-framework support not planned
