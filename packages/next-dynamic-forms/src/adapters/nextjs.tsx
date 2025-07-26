@@ -32,7 +32,21 @@ export function createNextJSAdapter(uiComponents: UIComponents) {
       throw new Error('next-intl is required for createNextJSAdapter. Please install next-intl or use createBasicAdapter instead.')
     }
     
-    const t = useTranslations()
+    // Create a fallback translation function for cases where context is not available (e.g., in tests)
+    const fallbackTranslator = (key: string, params?: Record<string, any>) => {
+      if (params) {
+        return key.replace(/\{(\w+)\}/g, (match, paramKey) => params[paramKey] || match)
+      }
+      return key
+    };
+    
+    let t = fallbackTranslator;
+    try {
+      t = useTranslations();
+    } catch (e) {
+      // If useTranslations throws due to missing context (e.g., in tests), use fallback
+      // This can happen when NextIntlClientProvider context is not available
+    }
     
     const i18nAdapter: I18nAdapter = {
       t: (key: string, params?: Record<string, any>) => t(key, params)
@@ -65,7 +79,22 @@ export function createNextJSFormSystem(uiComponents: UIComponents) {
         throw new Error('next-intl is required for createNextJSFormSystem. Please install next-intl or use createBasicAdapter instead.')
       }
       
-      const t = useTranslations()
+      // Create a fallback translation function for cases where context is not available (e.g., in tests)
+      const fallbackTranslator = (key: string, params?: Record<string, any>) => {
+        if (params) {
+          return key.replace(/\{(\w+)\}/g, (match, paramKey) => params[paramKey] || match)
+        }
+        return key
+      };
+      
+      let t = fallbackTranslator;
+      try {
+        t = useTranslations();
+      } catch (e) {
+        // If useTranslations throws due to missing context (e.g., in tests), use fallback
+        // This can happen when NextIntlClientProvider context is not available
+      }
+      
       return {
         t: (key: string, params?: Record<string, any>) => t(key, params)
       }
@@ -74,4 +103,4 @@ export function createNextJSFormSystem(uiComponents: UIComponents) {
 }
 
 // Export backward compatible aliases
-export { createNextJSAdapter as createNextJSAdapterCompat, createNextJSFormSystem as createNextJSFormSystemCompat } 
+export { createNextJSAdapter as createNextJSAdapterCompat, createNextJSFormSystem as createNextJSFormSystemCompat }

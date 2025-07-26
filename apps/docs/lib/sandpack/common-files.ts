@@ -1,4 +1,4 @@
-// CSS 样式文件
+// CSS style file
 export const globalCSS = `
 /* Base styles */
 * {
@@ -390,7 +390,7 @@ body {
 }
 `
 
-// UI 组件
+// UI Components
 export const uiComponentsCode = `import React from 'react';
 
 export const uiComponents = {
@@ -422,7 +422,7 @@ export const uiComponents = {
     }, children)
 };`
 
-// 自定义样式 UI 组件
+// Custom Styled UI Components
 export const customUiComponentsCode = `import React from 'react';
 
 export const customUiComponents = {
@@ -456,7 +456,7 @@ export const customUiComponents = {
     }, children)
 };`
 
-// i18n 适配器
+// i18n Adapter
 export const i18nAdapterCode = `export const i18nAdapter = {
   t: (key: string, params?: Record<string, any>) => {
     const translations: Record<string, string> = {
@@ -539,7 +539,7 @@ export const packageJsonCode = JSON.stringify({
   }
 }, null, 2)
 
-// Next.js 专用翻译文件
+// Next.js Specific Translation File
 export const nextjsTranslationsCode = `// Mock next-intl translations for demo
 const translations = {
   contact: {
@@ -596,7 +596,7 @@ export const useTranslations = (namespace) => {
   };
 };`
 
-// 独立翻译系统，支持中英文切换
+// Independent translation system, supports Chinese and English switching
 export const translationsCode = `export const translations = {
   en: {
     title: 'Next.js Integration Demo',
@@ -649,7 +649,7 @@ export const translationsCode = `export const translations = {
     },
     success: {
       title: '谢谢！',
-      message: '我们会尽快回复您。'
+      message: '我们会尽快回复您。
     },
     common: {
       optional: '可选',
@@ -658,7 +658,7 @@ export const translationsCode = `export const translations = {
   }
 };`
 
-// 共用文件集合
+// Common file collection
 export const commonFiles = {
   '/global.css': globalCSS,
   '/ui-components.tsx': uiComponentsCode,
@@ -695,12 +695,12 @@ export const useTranslations = (namespace) => {
 // Dummy provider that does nothing
 export const NextIntlClientProvider = ({ children }) => children;`
 
-// Next.js 专用的 NextIntlClientProvider 文件
+// Next.js specific NextIntlClientProvider file
 export const nextIntlProviderCode = `import { NextIntlClientProvider as Provider } from './node_modules/next-intl/index.js';
 
 export const NextIntlClientProvider = Provider;`
 
-// Next.js 专用文件集合
+// Next.js specific file collection
 export const nextjsFiles = {
   '/global.css': globalCSS,
   '/ui-components.tsx': uiComponentsCode,
@@ -714,4 +714,4 @@ export const nextjsFiles = {
       'react-dom': '^18.0.0'
     }
   }, null, 2)
-} 
+}

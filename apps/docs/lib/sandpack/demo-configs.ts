@@ -176,7 +176,7 @@ export const nextjsIntegrationConfig: SandpackConfig = {
   }
 }
 
-// Demo 配置映射
+// Demo Configs
 export const demoConfigs = {
   'basic-form': basicFormConfig,
   'multi-step': multiStepConfig,

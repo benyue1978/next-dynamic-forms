@@ -1,7 +1,8 @@
 import React from 'react'
 import type { FormConfig } from './types'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 
-// 基础 App 模板生成器
+// Basic App Template Generator
 export function createBasicAppTemplate(options: {
   title: string
   description?: string
@@ -70,7 +71,7 @@ export default function App() {
 }`
 }
 
-// 多步骤 App 模板生成器
+// Multi-step App Template Generator
 export function createMultiStepAppTemplate(options: {
   title: string
   description?: string
@@ -145,7 +146,7 @@ export default function App() {
 }`
 }
 
-// 自定义样式 App 模板生成器
+// Custom Styled App Template Generator
 export function createCustomStyledAppTemplate(options: {
   title: string
   description?: string
@@ -203,7 +204,7 @@ export default function App() {
 }`
 }
 
-// Next.js App 模板生成器 (使用完整包和 next-intl)
+// Next.js App Template Generator (using full package and next-intl)
 export function createNextJSAppTemplate(options: {
   title: string
   description?: string
@@ -226,12 +227,12 @@ import { formConfig } from './form-config';
 import './global.css';
 
 /*
- * 多语言表单实现示例
+ * Multilingual Form Implementation Example
  * 
- * 这个 demo 展示了如何直接使用 DynamicForm 实现多语言表单。
- * 在真实项目中，你可以选择以下两种方式：
+ * This demo shows how to directly use DynamicForm to implement multilingual forms.
+ * In real projects, you can choose one of the following two approaches:
  * 
- * 方式一：使用 createNextJSAdapter（推荐用于 Next.js + next-intl 项目）
+ * Approach 1: Using createNextJSAdapter (recommended for Next.js + next-intl projects)
  * \`\`\`tsx
  * import { createNextJSAdapter } from '@next-dynamic-forms';
  * import { useTranslations } from 'next-intl';
@@ -258,14 +259,14 @@ import './global.css';
  * }
  * \`\`\`
  * 
- * 方式二：直接使用 DynamicForm（适用于任何 React 项目）
+ * Approach 2: Directly using DynamicForm (suitable for any React project)
  * \`\`\`tsx
  * import { DynamicForm } from '@next-dynamic-forms/core';
  * 
  * export default function ContactPage() {
  *   const i18nAdapter = {
  *     t: (key, params) => {
- *       // 实现你的翻译逻辑
+ *       // Implement your translation logic
  *       return translatedText;
  *     }
  *   };
@@ -275,14 +276,14 @@ import './global.css';
  *       config={formConfig}
  *       uiComponents={uiComponents}
  *       i18n={i18nAdapter}
- *       // ... 其他 props
+ *       // ... other props
  *     />
  *   );
  * }
  * \`\`\`
  */
 
-// 多语言消息库
+// Multilingual Messages Library
 const messages = {
   en: {
     'form.title': 'Next.js Integration Demo',
@@ -370,7 +371,7 @@ const messages = {
   }
 };
 
-// 语言选择器组件
+// Language Selector Component
 function LanguageSelector({ currentLocale, onLocaleChange }) {
   return React.createElement('div', { className: 'language-selector' },
     React.createElement('label', { className: 'language-label' }, 'Language:'),
@@ -400,7 +401,7 @@ export default function App() {
     setSubmitted(true);
   };
 
-  // 创建 i18n adapter - 这是关键部分
+  // Create i18n adapter - this is the key part
   const i18nAdapter = {
     t: (key, params) => {
       const localeMessages = messages[currentLocale] || messages.en || {};
@@ -456,7 +457,7 @@ export default function App() {
 }`
 }
 
-// 表单配置生成器
+// Form Configuration Generator
 export function createFormConfig(config: {
   id: string
   templateName: string
