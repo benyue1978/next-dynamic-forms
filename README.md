@@ -154,13 +154,12 @@ pnpm clean
 
 ## 📖 Documentation
 
-Visit our [interactive documentation](https://next-dynamic-forms.vercel.app) for:
+Visit our [interactive documentation](https://next-dynamic-forms.withus.fun) for:
 
-- 📚 [Getting Started Guide](https://next-dynamic-forms.vercel.app/getting-started)
-- 🔧 [API Reference](https://next-dynamic-forms.vercel.app/api)
-- 🎯 [Examples](https://next-dynamic-forms.vercel.app/examples)
-- 🎮 [Interactive Playground](https://next-dynamic-forms.vercel.app/playground)
-- 🧩 [Live Demos](https://next-dynamic-forms.vercel.app/demos)
+- 📚 [Getting Started Guide](https://next-dynamic-forms.withus.fun)
+- 🔧 [API Reference](https://next-dynamic-forms.withus.fun/api)
+- 🎯 [Examples](https://next-dynamic-forms.withus.fun/demos)
+- 🎮 [Interactive Playground](https://next-dynamic-forms.withus.fun/playground)
 
 ## 🧪 Testing
 
@@ -190,7 +189,7 @@ pnpm test:coverage
 
 ## 🎮 Interactive Playground
 
-Our [interactive playground](https://next-dynamic-forms.vercel.app/playground) allows you to:
+Our [interactive playground](https://next-dynamic-forms.withus.fun/playground) allows you to:
 
 - 🧪 Experiment with live code
 - 📋 Copy and paste configurations
@@ -311,7 +310,7 @@ MIT © [benyue1978](https://github.com/benyue1978)
 
 ## 🆘 Support
 
-- 📖 [Documentation](https://next-dynamic-forms.vercel.app)
+- 📖 [Documentation](https://next-dynamic-forms.withus.fun)
 - 🐛 [Issues](https://github.com/benyue1978/next-dynamic-forms/issues)
 - 💬 [Discussions](https://github.com/benyue1978/next-dynamic-forms/discussions)
-- 📧 [Email](mailto:benyue1978@example.com)
+- 📧 [Email](mailto:benyue1978@gmail.com)
