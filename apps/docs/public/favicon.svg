@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="64" x2="64" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A5B4FC"/>
+      <stop offset="1" stop-color="#67E8F9"/>
+    </linearGradient>
+  </defs>
+  <!-- 主体大色块 -->
+  <rect x="8" y="8" width="48" height="48" rx="12" fill="url(#g1)"/>
+  <!-- 抽象表单行 -->
+  <rect x="18" y="22" width="28" height="6" rx="3" fill="url(#g2)" opacity="0.85"/>
+  <rect x="18" y="32" width="20" height="6" rx="3" fill="#fff" opacity="0.7"/>
+  <rect x="18" y="42" width="12" height="6" rx="3" fill="#fff" opacity="0.5"/>
+  <!-- 动态感点缀 -->
+  <circle cx="46" cy="46" r="4" fill="#fff" opacity="0.7"/>
+  <circle cx="38" cy="18" r="2" fill="#fff" opacity="0.5"/>
+</svg>

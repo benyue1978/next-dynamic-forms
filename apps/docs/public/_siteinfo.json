@@ -1,0 +1,31 @@
+{
+  "title": {
+    "en": "next-dynamic-forms - Dynamic Forms for React/Next.js",
+    "zh": "next-dynamic-forms - React/Next.js 动态表单解决方案"
+  },
+  "description": {
+    "en": "next-dynamic-forms is a flexible, extensible dynamic form package for React and Next.js. This documentation site provides comprehensive guides, real-world demos, and best practices for building multi-step, multi-language, and highly customizable forms.",
+    "zh": "next-dynamic-forms 是一个灵活可扩展的 React/Next.js 动态表单组件库。本网站为其官方文档，提供详细用法说明、真实案例演示和最佳实践，助您快速构建多步骤、多语言、高度自定义的表单。"
+  },
+  "icon": "/favicon.svg",
+  "keywords": {
+    "en": ["dynamic forms", "React", "Next.js", "form builder", "multi-language", "customizable", "documentation", "best practices"],
+    "zh": ["动态表单", "React", "Next.js", "表单生成器", "多语言", "可定制", "文档", "最佳实践"]
+  },
+  "features": {
+    "en": [
+      "Dynamic form rendering based on JSON configuration",
+      "Multi-step and multi-language support",
+      "Easy integration with React and Next.js projects",
+      "Highly customizable UI and validation",
+      "Comprehensive documentation and real-world demos"
+    ],
+    "zh": [
+      "基于 JSON 配置的动态表单渲染",
+      "支持多步骤与多语言",
+      "轻松集成到 React/Next.js 项目",
+      "高度可定制的界面与校验",
+      "详尽文档与真实案例演示"
+    ]
+  }
+} 
