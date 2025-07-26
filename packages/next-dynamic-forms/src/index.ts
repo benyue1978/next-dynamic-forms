@@ -22,9 +22,13 @@ export {
   DEFAULT_TASK_TYPES
 } from './utils/config-loader'
 
-// Adapters
+// Basic adapter (no next-intl dependency)
 export {
-  createBasicAdapter,        // Basic adapter, no specific framework dependency
+  createBasicAdapter        // Basic adapter, no specific framework dependency
+} from './adapters/basic'
+
+// Next.js adapters (requires next-intl)
+export {
   createNextJSAdapter,       // Next.js + next-intl adapter
   createNextJSFormSystem     // Complete Next.js system
 } from './adapters/nextjs'

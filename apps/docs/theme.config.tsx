@@ -6,9 +6,11 @@ export default {
   project: {
     link: 'https://github.com/benyue1978/next-dynamic-forms'
   },
-  docsRepositoryBase: 'https://github.com/benyue1978/next-dynamic-forms/tree/main/apps/docs',
+  editLink: {
+    component: null
+  },
   footer: {
-    text: 'MIT 2024 © Next Dynamic Forms'
+    text: 'MIT 2025 © Next Dynamic Forms'
   },
   useNextSeoProps() {
     const { asPath } = useRouter()

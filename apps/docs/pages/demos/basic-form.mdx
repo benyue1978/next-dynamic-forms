@@ -1,0 +1,123 @@
+# Basic Form
+
+A simple contact form demonstrating the core functionality of Next Dynamic Forms with basic UI components.
+
+This example shows how to create a single-step form with basic input fields and validation.
+
+## Features Demonstrated
+
+- ✨ Simple single-step form
+- 📋 Basic input validation
+- 🎯 Core form functionality
+- 📝 Textarea support
+
+## Live Demo
+
+import { DemoPreview } from '../../components/demo-preview'
+
+<DemoPreview demo="basic-form" />
+
+## Code
+
+If you want to see the full code or edit it live:
+
+<DemoPreview demo="basic-form" showEditor={true} />
+
+## Key Components
+
+### Form Configuration
+
+The form is defined using a simple JSON configuration:
+
+```json
+{
+  "id": "contact-form",
+  "templateName": "contact",
+  "steps": [
+    {
+      "id": "personal-info",
+      "title": "Personal Information",
+      "description": "Please provide your contact details",
+      "fields": [
+        {
+          "name": "fullName",
+          "type": "input",
+          "label": "Full Name",
+          "placeholder": "Enter your full name",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "input",
+          "label": "Email Address",
+          "placeholder": "Enter your email",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "textarea",
+          "label": "Message",
+          "placeholder": "Your message here...",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+## DynamicForm Component
+
+The core `DynamicForm` component renders forms based on configuration:
+
+```tsx
+import React, { useState } from 'react'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
+
+function BasicFormDemo() {
+  const [formData, setFormData] = useState({})
+
+  const handleDataChange = (newData) => {
+    setFormData(prevData => ({ ...prevData, ...newData }))
+  }
+
+  const handleSubmit = () => {
+    console.log('Form submitted:', formData)
+    // Handle form submission logic
+  }
+
+  return (
+    <DynamicForm
+      config={formConfig}
+      currentStepIndex={0}
+      formData={formData}
+      onDataChange={handleDataChange}
+      onNext={handleSubmit}
+      uiComponents={uiComponents}
+      i18nAdapter={i18nAdapter}
+    />
+  )
+}
+```
+
+## Key Features
+
+### Props Overview
+
+- **`config`** - Form configuration object defining structure and fields
+- **`currentStepIndex`** - Current step in multi-step forms (0 for single step)
+- **`formData`** - Current form data state
+- **`onDataChange`** - Callback when form data changes
+- **`onNext`** - Callback for form submission or next step
+- **`uiComponents`** - UI component mapping for rendering
+- **`i18nAdapter`** - Internationalization adapter for translations
+
+### State Management
+
+The component uses controlled state management:
+
+## Next Steps
+
+- [Multi-step Form](/demos/multi-step) - Learn how to create multi-step forms
+- [Custom Styling](/demos/custom-styling) - See how to style your forms beautifully
+- [Next.js Integration](/demos/nextjs-integration) - Integrate with Next.js applications

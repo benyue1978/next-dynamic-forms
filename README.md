@@ -71,7 +71,7 @@ const NextJSForm = createNextJSAdapter(uiComponents)
 
 ## 🏗️ Monorepo Structure
 
-```
+```text
 next-dynamic-forms/
 ├── apps/
 │   └── docs/                    # Documentation site (Next.js + Nextra)
@@ -255,13 +255,6 @@ Our [interactive playground](https://next-dynamic-forms.vercel.app/playground) a
 - `checkbox` - Boolean checkboxes
 
 ## 🌍 Internationalization
-
-### Next.js Integration
-```tsx
-import { createNextJSAdapter } from '@benyue1978/next-dynamic-forms'
-
-const NextJSForm = createNextJSAdapter(uiComponents)
-```
 
 ### Custom i18n
 ```tsx

@@ -1,0 +1,117 @@
+# Multi-step Form
+
+A comprehensive multi-step registration form demonstrating step-by-step navigation, progress tracking, and validation across multiple steps.
+
+## Features Demonstrated
+
+- 📊 Progress tracking with visual indicator
+- ⏭️ Step navigation (Next/Previous)
+- ✅ Form validation at each step
+- 📱 Responsive design
+- 🎯 Final submission handling
+
+## Live Demo
+
+import { DemoPreview } from '../../components/demo-preview'
+
+<DemoPreview demo="multi-step" />
+
+## Code
+
+<DemoPreview demo="multi-step" showEditor={true} />
+
+## Form Structure
+
+### Step 1: Personal Information
+- First Name
+- Last Name  
+- Email Address
+
+### Step 2: Company Details
+- Company Name
+- Position
+
+### Step 3: Preferences
+- Industry
+- Team Size
+
+## Key Implementation Details
+
+### Multi-step Configuration
+
+```json
+{
+  "id": "multi-step-form",
+  "templateName": "multi-step",
+  "steps": [
+    {
+      "id": "personal",
+      "title": "Personal Information",
+      "description": "Tell us about yourself",
+      "fields": [
+        { "name": "firstName", "type": "input", "label": "First Name", "required": true },
+        { "name": "lastName", "type": "input", "label": "Last Name", "required": true },
+        { "name": "email", "type": "input", "label": "Email", "required": true }
+      ]
+    },
+    {
+      "id": "company",
+      "title": "Company Details",
+      "description": "Information about your company",
+      "fields": [
+        { "name": "companyName", "type": "input", "label": "Company Name", "required": true },
+        { "name": "position", "type": "input", "label": "Position", "required": true }
+      ]
+    },
+    {
+      "id": "preferences",
+      "title": "Preferences",
+      "description": "Your preferences and interests",
+      "fields": [
+        { "name": "industry", "type": "input", "label": "Industry", "required": true },
+        { "name": "teamSize", "type": "input", "label": "Team Size", "placeholder": "e.g., 10-50" }
+      ]
+    }
+  ]
+}
+```
+
+### Progress Tracking
+
+The form includes a visual progress indicator:
+
+```tsx
+<div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+  <div
+    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+    style={{ width: `${((currentStep + 1) / formConfig.steps.length) * 100}%` }}
+  />
+</div>
+```
+
+### Navigation Logic
+
+```tsx
+const nextStep = () => 
+  setCurrentStep(s => Math.min(s + 1, formConfig.steps.length - 1));
+
+const prevStep = () => 
+  setCurrentStep(s => Math.max(s - 1, 0));
+```
+
+## Advanced Features
+
+### Step Validation
+Each step can have its own validation rules, ensuring users complete required fields before proceeding.
+
+### Conditional Navigation
+The final step changes the "Next" button to "Submit" and handles form submission.
+
+### Responsive Design
+The form adapts beautifully to different screen sizes, ensuring great mobile experience.
+
+## Related Examples
+
+- [Basic Form](/demos/basic-form) - Start with a simple single-step form
+- [Custom Styling](/demos/custom-styling) - Learn advanced styling techniques
+- [Next.js Integration](/demos/nextjs-integration) - See server-side integration

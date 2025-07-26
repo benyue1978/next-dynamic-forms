@@ -1,0 +1,380 @@
+# Next.js Integration
+
+Learn how to integrate Next Dynamic Forms with Next.js applications, featuring full internationalization support with `next-intl` and server-side rendering compatibility.
+
+## What Makes This Different
+
+- 🌍 **Full next-intl Integration** - Real translation support, not just dummy adapters
+- 🔄 **Server-Side Rendering** - Works with Next.js SSR and SSG
+- 🎯 **Type-Safe Translations** - TypeScript support for translation keys
+- 📱 **Next.js Ecosystem** - Designed for Next.js apps specifically
+- ⚡ **Production Ready** - Optimized for real-world applications
+
+## Live Demo
+
+import { DemoPreview } from '../../components/demo-preview'
+
+<DemoPreview demo="nextjs-integration" />
+
+> **⚠️ Demo Environment Limitation**: This demo uses an independent translation system instead of `createNextJSAdapter` because the demo environment doesn't support `next-intl` dependencies. In real Next.js projects, please use the complete integration method provided below.
+
+## Code
+
+<DemoPreview demo="nextjs-integration" showEditor={true} />
+
+## Language Switching Demo
+
+This demo supports Chinese and English switching, demonstrating the basic implementation of internationalization features. In real projects, you will use the complete internationalization features provided by `next-intl`.
+
+## Next.js Setup
+
+### 1. Install Dependencies
+
+```bash
+npm install @benyue1978/next-dynamic-forms next-intl
+```
+
+### 2. Configure next-intl
+
+Create `i18n.ts` configuration:
+
+```typescript
+import { createIntl, createIntlCache } from 'next-intl'
+
+const cache = createIntlCache()
+
+export const getIntl = (locale: string, messages: any) => {
+  return createIntl({ locale, messages }, cache)
+}
+```
+
+### 3. Create Translation Files
+
+`messages/en.json`:
+```json
+{
+  "contact": {
+    "title": "Contact Us",
+    "description": "We'd love to hear from you",
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email Address", 
+      "message": "Message"
+    },
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "email": "Enter your email address",
+      "message": "Your message here..."
+    },
+    "buttons": {
+      "submit": "Send Message"
+    },
+    "success": {
+      "title": "Thank you!",
+      "message": "We'll get back to you soon."
+    }
+  }
+}
+```
+
+`messages/zh.json`:
+```json
+{
+  "contact": {
+    "title": "联系我们",
+    "description": "我们很乐意听到您的声音",
+    "fields": {
+      "fullName": "姓名",
+      "email": "邮箱地址",
+      "message": "留言"
+    },
+    "placeholders": {
+      "fullName": "请输入您的姓名",
+      "email": "请输入邮箱地址",
+      "message": "请输入您的留言..."
+    },
+    "buttons": {
+      "submit": "发送消息"
+    },
+    "success": {
+      "title": "谢谢！",
+      "message": "我们会尽快回复您。"
+    }
+  }
+}
+```
+
+## Integration Example
+
+### 1. Import DynamicForm with Next.js Support
+
+```typescript
+import React, { useState } from 'react'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms'
+import { useTranslations } from 'next-intl'
+
+// Define UI components
+const uiComponents = {
+  Input: ({ value, onChange, ...props }) => (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      {...props}
+    />
+  ),
+  Textarea: ({ value, onChange, ...props }) => (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      rows={4}
+      {...props}
+    />
+  ),
+  Label: ({ children }) => (
+    <label className="block text-sm font-medium mb-2">{children}</label>
+  ),
+  Button: ({ children, ...props }) => (
+    <button
+      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}
+```
+
+### 2. Configure Real Internationalization
+
+Unlike the basic demos that use dummy translation adapters, this example shows how to integrate with actual `next-intl` translations:
+
+```typescript
+// In your component
+export default function ContactForm() {
+  const t = useTranslations('contact')
+  const [formData, setFormData] = useState({})
+  
+  // Real next-intl adapter with parameter support
+  const i18nAdapter = {
+    t: (key: string, params?: Record<string, any>) => {
+      // This actually calls next-intl's translation function
+      return t(key, params)
+    }
+  }
+
+  const handleDataChange = (newData) => {
+    setFormData(prevData => ({ ...prevData, ...newData }))
+  }
+
+  // Form config uses translation keys that map to your messages
+  const formConfig = {
+    id: 'contact-form',
+    templateName: 'contact',
+    steps: [
+      {
+        id: 'contact',
+        title: t('title'), // Resolved from messages/[locale].json
+        description: t('description'),
+        fields: [
+          {
+            name: 'fullName',
+            type: 'input',
+            label: t('fields.fullName'),
+            placeholder: t('placeholders.fullName'),
+            required: true
+          },
+          {
+            name: 'email',
+            type: 'input',
+            label: t('fields.email'),
+            placeholder: t('placeholders.email'),
+            required: true
+          },
+          {
+            name: 'message',
+            type: 'textarea',
+            label: t('fields.message'),
+            placeholder: t('placeholders.message'),
+            required: true
+          }
+        ]
+      }
+    ]
+  }
+
+  const handleNext = () => {
+    console.log('Form submitted:', formData)
+    // Handle form submission with localized success messages
+    alert(t('success.message'))
+  }
+
+  return (
+    <DynamicForm
+      config={formConfig}
+      currentStepIndex={0}
+      formData={formData}
+      onDataChange={handleDataChange}
+      onNext={handleNext}
+      uiComponents={uiComponents}
+      i18nAdapter={i18nAdapter}
+    />
+  )
+}
+```
+
+## Server-Side Rendering
+
+### 1. Get Server-Side Props
+
+```typescript
+export async function getServerSideProps({ locale }: { locale: string }) {
+  const messages = await import(`../messages/${locale}.json`)
+  
+  return {
+    props: {
+      messages: messages.default
+    }
+  }
+}
+```
+
+### 2. Static Generation
+
+```typescript
+export async function getStaticProps({ locale }: { locale: string }) {
+  const messages = await import(`../messages/${locale}.json`)
+  
+  return {
+    props: {
+      messages: messages.default
+    },
+    revalidate: 60 // ISR
+  }
+}
+```
+
+## Advanced Features
+
+### 1. Dynamic Routing
+
+```typescript
+// pages/form/[type].tsx
+export default function DynamicForm({ type }) {
+  const [formConfig, setFormConfig] = useState(null)
+  
+  useEffect(() => {
+    fetch(`/api/forms/${type}`)
+      .then(res => res.json())
+      .then(setFormConfig)
+  }, [type])
+  
+  if (!formConfig) return <div>Loading...</div>
+  
+  return <NextJSForm config={formConfig} />
+}
+```
+
+### 2. API Routes Integration
+
+```typescript
+// pages/api/forms/[type].ts
+export default async function handler(req, res) {
+  const { type } = req.query
+  
+  const forms = {
+    contact: contactFormConfig,
+    registration: registrationFormConfig,
+    survey: surveyFormConfig
+  }
+  
+  res.json(forms[type] || contactFormConfig)
+}
+```
+
+### 3. Form Submission
+
+```typescript
+// pages/api/submit.ts
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    const formData = req.body
+    
+    // Process form submission
+    await saveToDatabase(formData)
+    
+    res.json({ success: true })
+  }
+}
+```
+
+## Type Safety
+
+### Full TypeScript Support
+
+```typescript
+interface FormField {
+  name: string
+  type: 'input' | 'textarea' | 'select' | 'checkbox'
+  label: string
+  required?: boolean
+  validation?: ValidationRule[]
+}
+
+interface FormStep {
+  id: string
+  title: string
+  description: string
+  fields: FormField[]
+}
+
+interface FormConfig {
+  id: string
+  templateName: string
+  steps: FormStep[]
+}
+```
+
+## Performance Optimizations
+
+### 1. Code Splitting
+
+```typescript
+const DynamicForm = dynamic(
+  () => import('../components/DynamicForm'),
+  { loading: () => <div>Loading form...</div> }
+)
+```
+
+### 2. Memoization
+
+```typescript
+const MemoizedForm = React.memo(({ config, i18n }) => {
+  return <NextJSForm config={config} i18n={i18n} />
+})
+```
+
+## Testing
+
+### Unit Tests
+
+```typescript
+describe('NextJS Integration', () => {
+  it('should render with translations', () => {
+    const { getByText } = render(
+      <NextIntlProvider locale="en" messages={messages}>
+        <ContactForm />
+      </NextIntlProvider>
+    )
+    
+    expect(getByText('Contact Us')).toBeInTheDocument()
+  })
+})
+```
+
+## Related Examples
+
+- [Basic Form](/demos/basic-form) - Start with simple forms
+- [Multi-step Form](/demos/multi-step) - Complex multi-step forms
+- [Custom Styling](/demos/custom-styling) - Advanced styling techniques

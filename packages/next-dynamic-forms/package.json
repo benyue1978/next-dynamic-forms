@@ -1,6 +1,6 @@
 {
   "name": "@benyue1978/next-dynamic-forms",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Configuration-driven dynamic forms with built-in i18n support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,18 +10,21 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.mjs",
-      "require": "./dist/types/index.js"
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.js"
     }
   },
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "clean": "rm -rf dist",
     "test": "vitest",
     "test:unit": "vitest",

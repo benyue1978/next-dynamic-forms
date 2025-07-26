@@ -1,40 +1,42 @@
-# Interactive Playground
+# Live Playground
 
 Try the Next Dynamic Forms library live in your browser! Experiment with different configurations and see the results in real-time.
 
-import { Playground } from '@/components/playground'
+import { DemoPreview } from '../components/demo-preview'
 
-## Live Playground
+## Interactive Playground
 
 The playground below uses Sandpack to provide a fully functional React environment where you can modify the code and see instant updates.
 
-<Playground />
+<div className="my-8">
 
-## URL Parameters
+<DemoPreview demo="multi-step" showEditor={true} />
 
-You can load custom configurations using URL parameters:
-
-- **Base64 encoded source**: `/playground?src=base64encodedcode`
-- **Preset demos**: `/playground?demo=basic-form`
-
-### Example URLs
-
-```
-/playground?demo=nextjs-integration
-/playground?src=ZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gTXlGb3JtKCkgeyByZXR1cm4gPHA+SGVsbG8gV29ybGQ8L3A+IH0=
-```
+</div>
 
 ## Available Demos
 
-- [Basic Form](?demo=basic-form) - Simple contact form
-- [Next.js Integration](?demo=nextjs-integration) - Full Next.js example
-- [Custom Styling](?demo=custom-styling) - Styled components
-- [Multi-step Form](?demo=multi-step) - Complex multi-step form
+Explore our collection of interactive demos:
 
-## Share Your Configuration
+- [Basic Form](/demos/basic-form) - Simple contact form
+- [Multi-step Form](/demos/multi-step) - Complex multi-step form with progress tracking  
+- [Custom Styling](/demos/custom-styling) - Beautifully styled form with Tailwind CSS
+- [Next.js Integration](/demos/nextjs-integration) - Complete Next.js integration example
 
-Once you've created a configuration in the playground, you can share it by:
+## How to Use
 
-1. Copying the URL with base64 encoded source
-2. Using the "Share" button to generate a shareable link
-3. Saving to local storage for later use
+1. **Edit code** directly in the editor panel on the left
+2. **See live updates** in the preview panel on the right
+3. **Navigate between files** using the tabs
+4. **Experiment freely** - all changes are live!
+
+## Features
+
+- ✅ **Real-time editing** - See changes instantly as you type
+- ✅ **Full React environment** - Complete with all dependencies
+- ✅ **Multi-file support** - Edit multiple files in the same project
+- ✅ **Error handling** - Helpful error messages and debugging
+- ✅ **Tailwind CSS** - Styled components ready to go
+- ✅ **Multiple files** - Edit App.tsx, form-config.ts, package.json
+- ✅ **Shareable configurations** - Copy and share your creations
+- ✅ **Next.js integration** - Includes next-intl and server-side rendering

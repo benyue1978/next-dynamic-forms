@@ -19,17 +19,20 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
     switch (field.type) {
       case 'input':
         return (
-          <div className="relative">
+          <div className="field-input-container">
             <Input
               id={field.name}
               value={value || ''}
-              onChange={(e: any) => onChange(e.target.value)}
+              onChange={(newValue: any) => {
+                // Handle both event objects and direct values
+                const finalValue = newValue?.target?.value ?? newValue;
+                onChange(finalValue);
+              }}
               placeholder={field.placeholder ? t(field.placeholder) : ''}
               required={field.required}
-              className="modern-input text-lg py-6"
             />
             {field.icon && (
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+              <div className="field-icon">
                 {field.icon}
               </div>
             )}
@@ -38,18 +41,21 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
 
       case 'textarea':
         return (
-          <div className="relative">
+          <div className="field-textarea-container">
             <Textarea
               id={field.name}
               value={value || ''}
-              onChange={(e: any) => onChange(e.target.value)}
+              onChange={(newValue: any) => {
+                // Handle both event objects and direct values
+                const finalValue = newValue?.target?.value ?? newValue;
+                onChange(finalValue);
+              }}
               placeholder={field.placeholder ? t(field.placeholder) : ''}
               rows={field.rows || 4}
               required={field.required}
-              className="modern-input text-lg py-6 resize-none"
             />
             {field.icon && (
-              <div className="absolute right-3 top-3 text-muted-foreground">
+              <div className="field-icon">
                 {field.icon}
               </div>
             )}
@@ -58,13 +64,13 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
 
       case 'select':
         return (
-          <div className="relative">
+          <div className="field-select-container">
             <select
               id={field.name}
               value={value || ''}
               onChange={(e) => onChange(e.target.value)}
               required={field.required}
-              className="modern-input text-lg py-6 w-full"
+              className="field-select"
             >
               <option value="" disabled>
                 {field.placeholder ? t(field.placeholder) : t('Common.pleaseSelect')}
@@ -76,7 +82,7 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
               ))}
             </select>
             {field.icon && (
-              <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+              <div className="field-icon">
                 {field.icon}
               </div>
             )}
@@ -85,20 +91,21 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
 
       case 'tags':
         return (
-          <div className="relative">
+          <div className="field-tags-container">
             <Input
               id={field.name}
               value={Array.isArray(value) ? value.join(', ') : ''}
-              onChange={(e: any) => {
-                const tags = e.target.value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
+              onChange={(newValue: any) => {
+                // Handle both event objects and direct values
+                const finalValue = newValue?.target?.value ?? newValue;
+                const tags = finalValue.split(',').map((s: string) => s.trim()).filter((s: string) => s);
                 onChange(tags);
               }}
               placeholder={field.placeholder ? t(field.placeholder) : ''}
               required={field.required}
-              className="modern-input text-lg py-6"
             />
             {field.icon && (
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+              <div className="field-icon">
                 {field.icon}
               </div>
             )}
@@ -107,16 +114,16 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
 
       case 'checkbox':
         return (
-          <div className="flex items-center space-x-3">
+          <div className="field-checkbox-container">
             <input
               type="checkbox"
               id={field.name}
               checked={value || false}
               onChange={(e) => onChange(e.target.checked)}
-              className="w-5 h-5 text-primary focus:ring-primary border-2 border-muted-foreground rounded"
+              className="field-checkbox"
             />
             {field.icon && (
-              <span className="text-muted-foreground">{field.icon}</span>
+              <span className="field-icon">{field.icon}</span>
             )}
           </div>
         )
@@ -127,15 +134,15 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
   }
 
   return (
-    <div className="space-y-3">
-      <Label htmlFor={field.name} className="text-xl font-semibold text-foreground">
+    <div className="field-container">
+      <Label htmlFor={field.name} className="field-label">
         {t(field.label)} 
-        {field.required && <span className="text-red-500 font-bold">*</span>}
-        {!field.required && <span className="text-muted-foreground text-sm ml-2">{t('Common.optional')}</span>}
+        {field.required && <span className="field-required">*</span>}
+        {!field.required && <span className="field-optional">{t('Common.optional')}</span>}
       </Label>
       {renderField()}
       {field.description && (
-        <p className="text-sm text-muted-foreground ml-1">
+        <p className="field-description">
           {t(field.description)}
         </p>
       )}

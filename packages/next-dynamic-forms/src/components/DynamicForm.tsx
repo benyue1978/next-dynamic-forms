@@ -19,6 +19,12 @@ interface DynamicFormProps {
   renderPreviousButton?: (onClick: () => void, disabled: boolean) => React.ReactNode;
   renderNextButton?: (onClick: () => void, isLastStep: boolean) => React.ReactNode;
   renderProgress?: (currentStep: number, totalSteps: number) => React.ReactNode;
+  // Optional styling props
+  className?: string;
+  containerClassName?: string;
+  headerClassName?: string;
+  formClassName?: string;
+  buttonContainerClassName?: string;
 }
 
 export function DynamicForm({
@@ -34,7 +40,12 @@ export function DynamicForm({
   i18n,
   renderPreviousButton,
   renderNextButton,
-  renderProgress
+  renderProgress,
+  className = '',
+  containerClassName = '',
+  headerClassName = '',
+  formClassName = '',
+  buttonContainerClassName = ''
 }: DynamicFormProps) {
   const { Button, ProgressStep } = uiComponents
   const { t } = i18n
@@ -69,28 +80,16 @@ export function DynamicForm({
       variant="outline" 
       onClick={onClick}
       disabled={disabled}
-      className="border-2 hover:bg-primary hover:text-primary-foreground transition-all duration-300 px-10 py-4 text-lg backdrop-blur-sm"
     >
-      <div className="flex items-center space-x-2">
-        <span>←</span>
-        <span>{isFirstStep ? t('ProjectForm.backToSelection') : t('ProjectForm.previousStep')}</span>
-      </div>
+      {isFirstStep ? t('ProjectForm.backToSelection') : t('ProjectForm.previousStep')}
     </Button>
   )
 
   const defaultNextButton = (onClick: () => void, isLast: boolean) => (
     <Button 
       type="submit"
-      className="modern-button px-10 py-4 text-lg"
     >
-      {isLast ? (
-        <span>{t('ProjectForm.generatePrompt')}</span>
-      ) : (
-        <div className="flex items-center space-x-2">
-          <span>{t('ProjectForm.nextStep')}</span>
-          <span>→</span>
-        </div>
-      )}
+      {isLast ? t('ProjectForm.generatePrompt') : t('ProjectForm.nextStep')}
     </Button>
   )
 
@@ -98,30 +97,26 @@ export function DynamicForm({
     ProgressStep ? <ProgressStep currentStep={currentStep} totalSteps={totalSteps} /> : null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-16 px-6">
-      <div className="max-w-4xl mx-auto">
+    <div className={`dynamic-form-container ${className}`}>
+      <div className={`dynamic-form-wrapper ${containerClassName}`}>
         {/* Progress indicator */}
         {(renderProgress || defaultProgress)(currentStepIndex + 1, config.steps.length) && (
-          <div className="mb-12 animate-fade-in">
+          <div className="dynamic-form-progress">
             {(renderProgress || defaultProgress)(currentStepIndex + 1, config.steps.length)}
           </div>
         )}
 
-        <div className="modern-card p-12 animate-fade-in">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center mb-6">
-              <div className="tech-dot mr-3"></div>
-              <h1 className="text-4xl font-bold gradient-text">
-                {t(currentStep.title)}
-              </h1>
-              <div className="tech-dot ml-3"></div>
-            </div>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+        <div className={`dynamic-form-content ${formClassName}`}>
+          <div className={`dynamic-form-header ${headerClassName}`}>
+            <h1 className="dynamic-form-title">
+              {t(currentStep.title)}
+            </h1>
+            <p className="dynamic-form-description">
               {t(currentStep.description)}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-10">
+          <form onSubmit={handleSubmit} className="dynamic-form-fields">
             {currentStep.fields.map((field) => (
               <FieldRenderer
                 key={field.name}
@@ -133,7 +128,7 @@ export function DynamicForm({
               />
             ))}
 
-            <div className="flex justify-between pt-8">
+            <div className={`dynamic-form-buttons ${buttonContainerClassName}`}>
               {renderPreviousButton 
                 ? renderPreviousButton(onPrevious, isFirstStep)
                 : defaultPreviousButton(onPrevious, isFirstStep)

@@ -1,46 +1,10 @@
 'use client'
 
 import React from 'react'
-import { useTranslations } from 'next-intl'
 import { UIComponents, I18nAdapter, DynamicFormData, FormConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
 
-// Basic adapter (no next-intl dependency, for other frameworks)
-export function createBasicAdapter(uiComponents: UIComponents) {
-  return function BasicDynamicForm(props: {
-    config: FormConfig;
-    currentStepIndex: number;
-    formData: DynamicFormData;
-    onDataChange: (data: Partial<DynamicFormData>) => void;
-    onNext: () => void;
-    onPrevious: () => void;
-    isFirstStep: boolean;
-    isLastStep: boolean;
-    // Optional custom render functions
-    renderPreviousButton?: (onClick: () => void, disabled: boolean) => React.ReactNode;
-    renderNextButton?: (onClick: () => void, isLastStep: boolean) => React.ReactNode;
-    renderProgress?: (currentStep: number, totalSteps: number) => React.ReactNode;
-  }) {
-    // Create a simple i18n adapter, using keys as default values
-    const i18nAdapter: I18nAdapter = {
-      t: (key: string, params?: Record<string, any>) => {
-        // Simple parameter replacement
-        if (params) {
-          return key.replace(/\{(\w+)\}/g, (match, paramKey) => params[paramKey] || match)
-        }
-        return key
-      }
-    }
 
-    return (
-      <DynamicForm
-        {...props}
-        uiComponents={uiComponents}
-        i18n={i18nAdapter}
-      />
-    )
-  }
-}
 
 // Next.js + next-intl specific adapter (out-of-the-box)
 export function createNextJSAdapter(uiComponents: UIComponents) {
@@ -58,6 +22,16 @@ export function createNextJSAdapter(uiComponents: UIComponents) {
     renderNextButton?: (onClick: () => void, isLastStep: boolean) => React.ReactNode;
     renderProgress?: (currentStep: number, totalSteps: number) => React.ReactNode;
   }) {
+    // Dynamic import of next-intl to avoid bundling issues
+    let useTranslations: any;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const nextIntl = require('next-intl')
+      useTranslations = nextIntl.useTranslations
+    } catch (e) {
+      throw new Error('next-intl is required for createNextJSAdapter. Please install next-intl or use createBasicAdapter instead.')
+    }
+    
     const t = useTranslations()
     
     const i18nAdapter: I18nAdapter = {
@@ -81,6 +55,16 @@ export function createNextJSFormSystem(uiComponents: UIComponents) {
   return {
     DynamicForm: NextJSDynamicForm,
     createI18nAdapter: (): I18nAdapter => {
+      // Dynamic import of next-intl
+      let useTranslations: any;
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const nextIntl = require('next-intl')
+        useTranslations = nextIntl.useTranslations
+      } catch (e) {
+        throw new Error('next-intl is required for createNextJSFormSystem. Please install next-intl or use createBasicAdapter instead.')
+      }
+      
       const t = useTranslations()
       return {
         t: (key: string, params?: Record<string, any>) => t(key, params)

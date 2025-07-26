@@ -23,23 +23,59 @@ npm install @benyue1978/next-dynamic-forms
 ### Basic Usage
 
 ```tsx
-import { createBasicAdapter } from '@benyue1978/next-dynamic-forms'
-import { Input, Textarea, Label, Button } from '@/components/ui'
+import React, { useState } from 'react'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 
-const uiComponents = { Input, Textarea, Label, Button }
-const BasicForm = createBasicAdapter(uiComponents)
+// Define your UI components
+const uiComponents = {
+  Input: ({ value, onChange, ...props }) => (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+      {...props}
+    />
+  ),
+  Textarea: ({ value, onChange, ...props }) => (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+      rows={4}
+      {...props}
+    />
+  ),
+  Button: ({ children, ...props }) => (
+    <button
+      className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}
+
+// Simple i18n adapter
+const i18nAdapter = {
+  t: (key) => key, // For demo, just return the key
+}
 
 function MyForm() {
+  const [formData, setFormData] = useState({})
+  
+  const handleDataChange = (newData) => {
+    setFormData(prevData => ({ ...prevData, ...newData }))
+  }
+
   return (
-    <BasicForm
+    <DynamicForm
       config={formConfig}
       currentStepIndex={0}
-      formData={data}
-      onDataChange={setData}
-      onNext={handleNext}
-      onPrevious={handlePrevious}
-      isFirstStep={true}
-      isLastStep={false}
+      formData={formData}
+      onDataChange={handleDataChange}
+      onNext={() => console.log('Form submitted:', formData)}
+      uiComponents={uiComponents}
+      i18nAdapter={i18nAdapter}
     />
   )
 }
@@ -50,9 +86,28 @@ function MyForm() {
 For Next.js applications with `next-intl`:
 
 ```tsx
-import { createNextJSAdapter } from '@benyue1978/next-dynamic-forms'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms'
+import { useTranslations } from 'next-intl'
 
-const NextJSForm = createNextJSAdapter(uiComponents)
+function NextJSForm() {
+  const t = useTranslations()
+  
+  const i18nAdapter = {
+    t: (key, params) => t(key, params)
+  }
+
+  return (
+    <DynamicForm
+      config={formConfig}
+      currentStepIndex={0}
+      formData={formData}
+      onDataChange={handleDataChange}
+      onNext={handleNext}
+      uiComponents={uiComponents}
+      i18nAdapter={i18nAdapter}
+    />
+  )
+}
 ```
 
 ## Configuration Format
@@ -89,7 +144,5 @@ Forms are defined using simple JSON configurations:
 
 ## Next Steps
 
-- [Getting Started](/getting-started) - Set up your first form
-- [API Reference](/api) - Explore all available options
-- [Examples](/examples) - See real-world usage patterns
+- [Demos](/demos) - Explore interactive examples
 - [Playground](/playground) - Try it live in your browser

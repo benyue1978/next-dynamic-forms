@@ -46,3 +46,6 @@ Thumbs.db
 # Changesets
 .changeset/pre.json
 EOF < /dev/null
+# Turborepo
+.turbo
+.vercel

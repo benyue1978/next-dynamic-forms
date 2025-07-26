@@ -1,0 +1,241 @@
+# Custom Styling
+
+Learn how to create beautiful, custom-styled forms with Next Dynamic Forms. This guide shows you how to implement your own design system and styling patterns.
+
+## Key Concepts
+
+- 🎨 **Custom UI Components** - Create your own styled components
+- 🎯 **CSS Class Integration** - Use any CSS framework or custom styles
+- 📦 **Component Props** - Pass className and style props
+- 🔧 **Flexible Architecture** - Works with Tailwind, styled-components, CSS modules, etc.
+
+## Live Demo
+
+import { DemoPreview } from '../../components/demo-preview'
+
+<DemoPreview demo="custom-styling" />
+
+## How to Customize
+
+<DemoPreview demo="custom-styling" showEditor={true} />
+
+## Creating Custom Components
+
+### Step 1: Define Your UI Components
+
+The key to custom styling is creating your own UI component implementations:
+
+### Glassmorphism Effect
+
+```css
+.bg-white\/70 {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+}
+```
+
+### Button Animations
+
+```css
+button {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  transform: translateY(-1px);
+}
+```
+
+## Custom Components
+
+### Styled Input Component
+
+```tsx
+const Input = ({ value, onChange, className = '', ...props }) => 
+  React.createElement('input', {
+    value: value || '',
+    onChange: (e) => onChange(e.target.value),
+    className: `gradient-input ${className}`,
+    ...props
+  })
+```
+
+### Gradient Button
+
+```tsx
+const Button = ({ children, className = '', ...props }) => 
+  React.createElement('button', {
+    className: `gradient-btn ${className}`,
+    ...props
+  }, children)
+```
+
+### Complete Custom UI Components
+
+```tsx
+const customUiComponents = {
+  Input: ({ value, onChange, className = '', ...props }) => 
+    React.createElement('input', {
+      value: value || '',
+      onChange: (e) => onChange(e.target.value),
+      className: `gradient-input ${className}`,
+      ...props
+    }),
+    
+  Textarea: ({ value, onChange, className = '', ...props }) => 
+    React.createElement('textarea', {
+      value: value || '',
+      onChange: (e) => onChange(e.target.value),
+      className: `gradient-input ${className}`,
+      style: { minHeight: '120px' },
+      ...props
+    }),
+    
+  Label: ({ children, className = '' }) => 
+    React.createElement('label', {
+      className: `form-label ${className}`,
+      style: { fontWeight: '600', color: '#4c1d95' }
+    }, children),
+    
+  Button: ({ children, className = '', ...props }) => 
+    React.createElement('button', {
+      className: `gradient-btn ${className}`,
+      ...props
+    }, children)
+}
+```
+
+### Step 2: Apply Your CSS Classes
+
+Create CSS classes that match your design system:
+
+```css
+.gradient-input {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+}
+
+.gradient-input:focus {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.gradient-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.gradient-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+}
+```
+
+### Step 3: Use with DynamicForm
+
+```tsx
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
+
+function CustomStyledForm() {
+  return (
+    <DynamicForm
+      config={formConfig}
+      uiComponents={customUiComponents}
+      // ... other props
+    />
+  )
+}
+```
+
+## Styling Approaches
+
+### CSS Framework Integration
+
+You can use any CSS framework with custom components:
+
+```tsx
+// Tailwind CSS example
+const tailwindComponents = {
+  Input: ({ value, onChange, ...props }) => (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+      {...props}
+    />
+  )
+}
+
+// Styled-components example
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+`;
+```
+
+## Responsive Design
+
+The form uses Tailwind CSS's responsive utilities:
+
+- **Mobile**: Full-width inputs, stacked layout
+- **Tablet**: Adjusted padding and spacing
+- **Desktop**: Centered layout with max-width constraints
+
+## Accessibility Features
+
+- High contrast ratios
+- Focus indicators
+- Keyboard navigation support
+- Screen reader friendly
+
+## Customization Tips
+
+### Color Themes
+You can easily customize the color scheme by modifying the Tailwind classes:
+
+```tsx
+// Change primary color
+className="bg-gradient-to-r from-green-500 to-teal-600"
+
+// Dark theme
+className="bg-gray-900 text-white"
+```
+
+### Animation Speed
+Adjust transition durations:
+
+```tsx
+className="transition-all duration-300" // Faster
+className="transition-all duration-500" // Slower
+```
+
+## Performance Considerations
+
+- Optimized CSS with Tailwind JIT
+- Minimal bundle size
+- Efficient re-renders with React.memo
+
+## Related Examples
+
+- [Basic Form](/demos/basic-form) - Start with simple styling
+- [Multi-step Form](/demos/multi-step) - Apply styling to multi-step forms
+- [Next.js Integration](/demos/nextjs-integration) - Server-side styling integration

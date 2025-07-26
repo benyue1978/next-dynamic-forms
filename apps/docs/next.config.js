@@ -6,7 +6,11 @@ const withNextra = require('nextra')({
     codeblocks: false
   },
   defaultShowCopyCode: true,
-  readingTime: true
+  readingTime: true,
+  mdxOptions: {
+    remarkPlugins: [],
+    rehypePlugins: []
+  }
 })
 
 /** @type {import('next').NextConfig} */
