@@ -1,17 +1,23 @@
-# @benyue1978/dynamic-forms
+# @benyue1978/next-dynamic-forms
 
 A configuration-driven dynamic form system with multi-step forms, built-in internationalization, and UI component adaptation.
 
 ## 🚀 Quick Start
 
-### Basic Usage
+### Installation
 
 ```bash
-npm install @benyue1978/dynamic-forms
+npm install @benyue1978/next-dynamic-forms
+# or
+pnpm add @benyue1978/next-dynamic-forms
+# or
+yarn add @benyue1978/next-dynamic-forms
 ```
 
+### Basic Usage
+
 ```tsx
-import { DynamicForm, createApiConfigLoader } from '@benyue1978/dynamic-forms'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 
 // 1. Define UI components
 const uiComponents = {
@@ -32,18 +38,19 @@ const i18nAdapter = {
 
 // 3. Use the component
 function MyForm() {
-  const configLoader = createApiConfigLoader()
+  const [formData, setFormData] = useState({})
+  const [currentStep, setCurrentStep] = useState(0)
   
   return (
     <DynamicForm
       config={formConfig}
-      currentStepIndex={0}
-      formData={data}
-      onDataChange={handleChange}
-      onNext={handleNext}
-      onPrevious={handlePrevious}
-      isFirstStep={true}
-      isLastStep={false}
+      currentStepIndex={currentStep}
+      formData={formData}
+      onDataChange={(newData) => setFormData(prev => ({ ...prev, ...newData }))}
+      onNext={() => setCurrentStep(prev => prev + 1)}
+      onPrevious={() => setCurrentStep(prev => prev - 1)}
+      isFirstStep={currentStep === 0}
+      isLastStep={currentStep === formConfig.steps.length - 1}
       uiComponents={uiComponents}
       i18n={i18nAdapter}
     />
@@ -62,7 +69,7 @@ Create an adapter file `lib/dynamic-forms-adapter.tsx`:
 
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { DynamicForm, UIComponents, I18nAdapter } from '@benyue1978/dynamic-forms'
+import { DynamicForm, UIComponents, I18nAdapter } from '@benyue1978/next-dynamic-forms/core'
 // Import your UI components
 import { Input, Textarea, Label, Button } from '@/components/ui'
 
@@ -73,7 +80,14 @@ export const uiComponents: UIComponents = {
 
 // Create Next.js adapter component
 export function NextJSDynamicForm(props: {
-  // ... all DynamicForm props
+  config: any
+  currentStepIndex: number
+  formData: any
+  onDataChange: (data: any) => void
+  onNext: () => void
+  onPrevious: () => void
+  isFirstStep: boolean
+  isLastStep: boolean
 }) {
   const t = useTranslations()
   
@@ -97,28 +111,49 @@ Usage:
 import { NextJSDynamicForm } from '@/lib/dynamic-forms-adapter'
 
 function MyPage() {
+  const [formData, setFormData] = useState({})
+  const [currentStep, setCurrentStep] = useState(0)
+  
   return (
     <NextJSDynamicForm
       config={formConfig}
-      // ... other props
+      currentStepIndex={currentStep}
+      formData={formData}
+      onDataChange={(newData) => setFormData(prev => ({ ...prev, ...newData }))}
+      onNext={() => setCurrentStep(prev => prev + 1)}
+      onPrevious={() => setCurrentStep(prev => prev - 1)}
+      isFirstStep={currentStep === 0}
+      isLastStep={currentStep === formConfig.steps.length - 1}
     />
   )
 }
 ```
 
-### Option 2: Built-in Adapter (Experimental)
+### Option 2: Built-in Adapter
 
 ```tsx
-import { createNextJSAdapter } from '@benyue1978/dynamic-forms'
+import { createNextJSAdapter } from '@benyue1978/next-dynamic-forms'
 
 const NextJSForm = createNextJSAdapter(uiComponents)
 
 function MyPage() {
-  return <NextJSForm config={formConfig} /* ... */ />
+  const [formData, setFormData] = useState({})
+  const [currentStep, setCurrentStep] = useState(0)
+  
+  return (
+    <NextJSForm 
+      config={formConfig}
+      currentStepIndex={currentStep}
+      formData={formData}
+      onDataChange={(newData) => setFormData(prev => ({ ...prev, ...newData }))}
+      onNext={() => setCurrentStep(prev => prev + 1)}
+      onPrevious={() => setCurrentStep(prev => prev - 1)}
+      isFirstStep={currentStep === 0}
+      isLastStep={currentStep === formConfig.steps.length - 1}
+    />
+  )
 }
 ```
-
-**Note**: Built-in adapters may have dependency version conflicts. Option 1 is recommended.
 
 ## 🔧 Other Framework Adapters
 
@@ -126,7 +161,7 @@ function MyPage() {
 
 ```tsx
 import { useTranslation } from 'react-i18next'
-import { DynamicForm } from '@benyue1978/dynamic-forms'
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 
 function ReactI18nForm(props) {
   const { t } = useTranslation()
@@ -142,7 +177,7 @@ function ReactI18nForm(props) {
 ### No Internationalization
 
 ```tsx
-import { createBasicAdapter } from '@benyue1978/dynamic-forms'
+import { createBasicAdapter } from '@benyue1978/next-dynamic-forms'
 
 const BasicForm = createBasicAdapter(uiComponents)
 // Will use keys as display text
@@ -166,6 +201,13 @@ const BasicForm = createBasicAdapter(uiComponents)
           "label": "Project Name",
           "placeholder": "Enter project name",
           "required": true
+        },
+        {
+          "name": "description",
+          "type": "textarea",
+          "label": "Description",
+          "placeholder": "Enter project description",
+          "rows": 4
         }
       ]
     }
@@ -182,22 +224,25 @@ interface UIComponents {
   Input: React.ComponentType<{
     id?: string
     value: string
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void
+    onChange: (value: string) => void
     placeholder?: string
     required?: boolean
+    className?: string
   }>
   
   Textarea: React.ComponentType<{
     id?: string
     value: string
-    onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
+    onChange: (value: string) => void
     rows?: number
     placeholder?: string
+    className?: string
   }>
   
   Label: React.ComponentType<{
     htmlFor?: string
     children: React.ReactNode
+    className?: string
   }>
   
   Button: React.ComponentType<{
@@ -205,20 +250,37 @@ interface UIComponents {
     onClick?: () => void
     disabled?: boolean
     type?: 'button' | 'submit'
+    className?: string
   }>
   
   ProgressStep?: React.ComponentType<{
     currentStep: number
     totalSteps: number
+    className?: string
   }>
 }
+```
+
+## 📦 Package Exports
+
+The package provides two entry points:
+
+- **Main entry** (`@benyue1978/next-dynamic-forms`): Includes Next.js adapters
+- **Core entry** (`@benyue1978/next-dynamic-forms/core`): Core components only, no Next.js dependencies
+
+```tsx
+// For Next.js projects
+import { createNextJSAdapter } from '@benyue1978/next-dynamic-forms'
+
+// For other React projects
+import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 ```
 
 ## 🤔 FAQ
 
 ### Q: Does every project need to create an adapter?
 
-**A**: Yes, but this is a deliberate design decision:
+**A**: No, but it's recommended for better integration:
 
 1. **Flexibility**: Different projects use different UI libraries and i18n solutions
 2. **Avoid dependency conflicts**: Direct inclusion would cause version locking
@@ -226,11 +288,11 @@ interface UIComponents {
 
 ### Q: Can you provide pre-made adapters?
 
-**A**: We are considering providing:
+**A**: We provide:
 
-- Template code generators
-- Adapter examples for common UI libraries
-- More simplified APIs
+- `createBasicAdapter`: For projects without i18n
+- `createNextJSAdapter`: For Next.js + next-intl projects
+- Core components for custom implementations
 
 ### Q: How to reduce boilerplate code?
 
@@ -240,9 +302,13 @@ interface UIComponents {
 2. Use code snippets/templates
 3. Create internal wrappers for teams
 
-## 📦 Complete Examples
+## 📖 Documentation
 
-Check the [examples/](./examples/) directory for complete example projects.
+Visit our [interactive documentation](https://next-dynamic-forms.withus.fun) for:
+
+- 📚 [Getting Started Guide](https://next-dynamic-forms.withus.fun)
+- 🎯 [Examples](https://next-dynamic-forms.withus.fun/demos)
+- 🎮 [Interactive Playground](https://next-dynamic-forms.withus.fun/playground)
 
 ## 🛠️ Development
 
@@ -251,3 +317,7 @@ npm run test       # Run tests
 npm run build      # Build package
 npm run coverage   # Test coverage
 ```
+
+## 📄 License
+
+MIT © [benyue1978](https://github.com/benyue1978)
