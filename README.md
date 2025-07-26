@@ -157,7 +157,6 @@ pnpm clean
 Visit our [interactive documentation](https://next-dynamic-forms.withus.fun) for:
 
 - 📚 [Getting Started Guide](https://next-dynamic-forms.withus.fun)
-- 🔧 [API Reference](https://next-dynamic-forms.withus.fun/api)
 - 🎯 [Examples](https://next-dynamic-forms.withus.fun/demos)
 - 🎮 [Interactive Playground](https://next-dynamic-forms.withus.fun/playground)
 
@@ -313,4 +312,4 @@ MIT © [benyue1978](https://github.com/benyue1978)
 - 📖 [Documentation](https://next-dynamic-forms.withus.fun)
 - 🐛 [Issues](https://github.com/benyue1978/next-dynamic-forms/issues)
 - 💬 [Discussions](https://github.com/benyue1978/next-dynamic-forms/discussions)
-- 📧 [Email](mailto:benyue1978@gmail.com)
+- 📧 [Email](mailto:yuesong@gmail.com)
