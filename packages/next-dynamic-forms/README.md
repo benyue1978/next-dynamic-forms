@@ -58,6 +58,30 @@ function MyForm() {
 }
 ```
 
+### Customizing Form Texts
+
+You can customize all form texts without relying on specific translation keys:
+
+```tsx
+<DynamicForm
+  config={formConfig}
+  // ... other props
+  buttonTexts={{
+    previous: '上一步',
+    next: '下一步',
+    submit: '提交',
+    back: '返回'
+  }}
+  labels={{
+    optional: '(可选)',
+    pleaseSelect: '请选择...'
+  }}
+  errorMessages={{
+    requiredFieldsMissing: '请填写必填字段: {fields}'
+  }}
+/>
+```
+
 ## 🎯 Next.js + next-intl Integration
 
 ### Option 1: Simple Adapter (Recommended)
@@ -88,6 +112,20 @@ export function NextJSDynamicForm(props: {
   onPrevious: () => void
   isFirstStep: boolean
   isLastStep: boolean
+  // Optional text customization
+  buttonTexts?: {
+    previous?: string;
+    next?: string;
+    submit?: string;
+    back?: string;
+  };
+  labels?: {
+    optional?: string;
+    pleaseSelect?: string;
+  };
+  errorMessages?: {
+    requiredFieldsMissing?: string;
+  };
 }) {
   const t = useTranslations()
   
@@ -124,6 +162,10 @@ function MyPage() {
       onPrevious={() => setCurrentStep(prev => prev - 1)}
       isFirstStep={currentStep === 0}
       isLastStep={currentStep === formConfig.steps.length - 1}
+      buttonTexts={{
+        submit: 'Generate Project',
+        back: 'Back to Projects'
+      }}
     />
   )
 }
@@ -150,6 +192,10 @@ function MyPage() {
       onPrevious={() => setCurrentStep(prev => prev - 1)}
       isFirstStep={currentStep === 0}
       isLastStep={currentStep === formConfig.steps.length - 1}
+      buttonTexts={{
+        submit: 'Generate Project',
+        back: 'Back to Projects'
+      }}
     />
   )
 }
@@ -276,6 +322,72 @@ import { createNextJSAdapter } from '@benyue1978/next-dynamic-forms'
 import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 ```
 
+## 🎨 Text Customization
+
+### Default Texts
+
+The form uses these default texts:
+
+```typescript
+// Button texts
+{
+  previous: 'Previous',
+  next: 'Next', 
+  submit: 'Submit',
+  back: 'Back'
+}
+
+// Labels
+{
+  optional: 'Optional',
+  pleaseSelect: 'Please select...'
+}
+
+// Error messages
+{
+  requiredFieldsMissing: 'Please fill in all required fields: {fields}'
+}
+```
+
+### Customizing Texts
+
+You can override any text by passing the corresponding props:
+
+```tsx
+<DynamicForm
+  config={formConfig}
+  // ... other props
+  buttonTexts={{
+    submit: 'Generate Project',  // Override submit button
+    back: 'Back to Projects'     // Override back button
+  }}
+  labels={{
+    optional: '(Optional)'       // Override optional label
+  }}
+  errorMessages={{
+    requiredFieldsMissing: 'Missing fields: {fields}'  // Override error message
+  }}
+/>
+```
+
+### Internationalization Support
+
+Texts can be internationalized through the i18n adapter:
+
+```tsx
+const i18nAdapter = {
+  t: (key: string, params?: any) => {
+    const translations = {
+      'form.buttons.submit': '提交',
+      'form.buttons.back': '返回',
+      'form.labels.optional': '(可选)',
+      // ... other translations
+    };
+    return translations[key] || key;
+  }
+};
+```
+
 ## 🤔 FAQ
 
 ### Q: Does every project need to create an adapter?
@@ -301,6 +413,18 @@ import { DynamicForm } from '@benyue1978/next-dynamic-forms/core'
 1. Create project-level hooks
 2. Use code snippets/templates
 3. Create internal wrappers for teams
+
+### Q: Can I customize form texts without translation keys?
+
+**A**: Yes! The form now supports direct text customization:
+
+```tsx
+<DynamicForm
+  buttonTexts={{ submit: 'Generate Project' }}
+  labels={{ optional: '(Optional)' }}
+  errorMessages={{ requiredFieldsMissing: 'Missing: {fields}' }}
+/>
+```
 
 ## 📖 Documentation
 

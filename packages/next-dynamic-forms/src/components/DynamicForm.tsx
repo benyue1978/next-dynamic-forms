@@ -25,6 +25,20 @@ interface DynamicFormProps {
   headerClassName?: string;
   formClassName?: string;
   buttonContainerClassName?: string;
+  // Optional text customization
+  buttonTexts?: {
+    previous?: string;
+    next?: string;
+    submit?: string;
+    back?: string;
+  };
+  labels?: {
+    optional?: string;
+    pleaseSelect?: string;
+  };
+  errorMessages?: {
+    requiredFieldsMissing?: string;
+  };
 }
 
 export function DynamicForm({
@@ -45,11 +59,31 @@ export function DynamicForm({
   containerClassName = '',
   headerClassName = '',
   formClassName = '',
-  buttonContainerClassName = ''
+  buttonContainerClassName = '',
+  buttonTexts = {},
+  labels = {},
+  errorMessages = {}
 }: DynamicFormProps) {
   const { Button, ProgressStep } = uiComponents
   const { t } = i18n
   const currentStep = config.steps[currentStepIndex]
+
+  // Default button texts
+  const defaultButtonTexts = {
+    previous: 'Previous',
+    next: 'Next',
+    submit: 'Submit',
+    back: 'Back'
+  }
+
+  // Default error messages
+  const defaultErrorMessages = {
+    requiredFieldsMissing: 'Please fill in all required fields: {fields}'
+  }
+
+  // Merge with provided texts
+  const texts = { ...defaultButtonTexts, ...buttonTexts }
+  const errors = { ...defaultErrorMessages, ...errorMessages }
 
   const handleFieldChange = (fieldName: string, value: any) => {
     onDataChange({ [fieldName]: value })
@@ -67,7 +101,9 @@ export function DynamicForm({
 
     if (missingFields.length > 0) {
       const fieldNames = missingFields.map(field => t(field.label)).join(', ')
-      alert(t('Common.requiredFieldsMissing', { fields: fieldNames }))
+      const errorMessage = errors.requiredFieldsMissing?.replace('{fields}', fieldNames) || 
+                          `Please fill in all required fields: ${fieldNames}`
+      alert(errorMessage)
       return
     }
 
@@ -81,7 +117,7 @@ export function DynamicForm({
       onClick={onClick}
       disabled={disabled}
     >
-      {isFirstStep ? t('ProjectForm.backToSelection') : t('ProjectForm.previousStep')}
+      {isFirstStep ? texts.back : texts.previous}
     </Button>
   )
 
@@ -89,7 +125,7 @@ export function DynamicForm({
     <Button 
       type="submit"
     >
-      {isLast ? t('ProjectForm.generatePrompt') : t('ProjectForm.nextStep')}
+      {isLast ? texts.submit : texts.next}
     </Button>
   )
 
@@ -125,6 +161,7 @@ export function DynamicForm({
                 onChange={(value) => handleFieldChange(field.name, value)}
                 uiComponents={uiComponents}
                 i18n={i18n}
+                labels={labels}
               />
             ))}
 

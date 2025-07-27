@@ -47,4 +47,21 @@ export interface UIComponents {
 // Internationalization adapter interface
 export interface I18nAdapter {
   t: (key: string, params?: Record<string, any>) => string;
+}
+
+// Form text configuration interface
+export interface FormTextConfig {
+  buttonTexts?: {
+    previous?: string;
+    next?: string;
+    submit?: string;
+    back?: string;
+  };
+  labels?: {
+    optional?: string;
+    pleaseSelect?: string;
+  };
+  errorMessages?: {
+    requiredFieldsMissing?: string;
+  };
 } 

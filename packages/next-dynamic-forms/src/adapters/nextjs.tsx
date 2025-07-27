@@ -1,10 +1,8 @@
 'use client'
 
 import React from 'react'
-import { UIComponents, I18nAdapter, DynamicFormData, FormConfig } from '../types'
+import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
-
-
 
 // Next.js + next-intl specific adapter (out-of-the-box)
 export function createNextJSAdapter(uiComponents: UIComponents) {
@@ -21,6 +19,16 @@ export function createNextJSAdapter(uiComponents: UIComponents) {
     renderPreviousButton?: (onClick: () => void, disabled: boolean) => React.ReactNode;
     renderNextButton?: (onClick: () => void, isLastStep: boolean) => React.ReactNode;
     renderProgress?: (currentStep: number, totalSteps: number) => React.ReactNode;
+    // Optional styling props
+    className?: string;
+    containerClassName?: string;
+    headerClassName?: string;
+    formClassName?: string;
+    buttonContainerClassName?: string;
+    // Optional text customization
+    buttonTexts?: FormTextConfig['buttonTexts'];
+    labels?: FormTextConfig['labels'];
+    errorMessages?: FormTextConfig['errorMessages'];
   }) {
     // Dynamic import of next-intl to avoid bundling issues
     let useTranslations: any;

@@ -170,7 +170,7 @@ describe('DynamicForm', () => {
       fireEvent.submit(form)
       
       expect(alertSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Common.requiredFieldsMissing')
+        expect.stringContaining('Please fill in all required fields')
       )
       expect(mockProps.onNext).not.toHaveBeenCalled()
       

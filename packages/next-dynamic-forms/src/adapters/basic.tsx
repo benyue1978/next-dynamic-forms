@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { UIComponents, I18nAdapter, DynamicFormData, FormConfig } from '../types'
+import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
 
 // Basic adapter (no next-intl dependency, for other frameworks)
@@ -19,6 +19,16 @@ export function createBasicAdapter(uiComponents: UIComponents) {
     renderPreviousButton?: (onClick: () => void, disabled: boolean) => React.ReactNode;
     renderNextButton?: (onClick: () => void, isLastStep: boolean) => React.ReactNode;
     renderProgress?: (currentStep: number, totalSteps: number) => React.ReactNode;
+    // Optional styling props
+    className?: string;
+    containerClassName?: string;
+    headerClassName?: string;
+    formClassName?: string;
+    buttonContainerClassName?: string;
+    // Optional text customization
+    buttonTexts?: FormTextConfig['buttonTexts'];
+    labels?: FormTextConfig['labels'];
+    errorMessages?: FormTextConfig['errorMessages'];
   }) {
     // Create a simple i18n adapter, using keys as default values
     const i18nAdapter: I18nAdapter = {

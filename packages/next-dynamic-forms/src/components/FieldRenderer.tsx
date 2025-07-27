@@ -9,11 +9,32 @@ interface FieldRendererProps {
   onChange: (value: any) => void;
   uiComponents: UIComponents;
   i18n: I18nAdapter;
+  // Optional text customization
+  labels?: {
+    optional?: string;
+    pleaseSelect?: string;
+  };
 }
 
-export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: FieldRendererProps) {
+export function FieldRenderer({ 
+  field, 
+  value, 
+  onChange, 
+  uiComponents, 
+  i18n,
+  labels = {}
+}: FieldRendererProps) {
   const { Input, Textarea, Label } = uiComponents
   const { t } = i18n
+
+  // Default labels
+  const defaultLabels = {
+    optional: 'Optional',
+    pleaseSelect: 'Please select...'
+  }
+
+  // Merge with provided labels
+  const finalLabels = { ...defaultLabels, ...labels }
 
   const renderField = () => {
     switch (field.type) {
@@ -73,7 +94,7 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
               className="field-select"
             >
               <option value="" disabled>
-                {field.placeholder ? t(field.placeholder) : t('Common.pleaseSelect')}
+                {field.placeholder ? t(field.placeholder) : finalLabels.pleaseSelect}
               </option>
               {field.options?.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -138,7 +159,7 @@ export function FieldRenderer({ field, value, onChange, uiComponents, i18n }: Fi
       <Label htmlFor={field.name} className="field-label">
         {t(field.label)} 
         {field.required && <span className="field-required">*</span>}
-        {!field.required && <span className="field-optional">{t('Common.optional')}</span>}
+        {!field.required && <span className="field-optional">{finalLabels.optional}</span>}
       </Label>
       {renderField()}
       {field.description && (
