@@ -1,3 +1,5 @@
+import React from 'react'
+
 export interface FieldOption {
   value: string;
   label: string;
@@ -41,7 +43,7 @@ export interface UIComponents {
   Textarea: React.ComponentType<any>;
   Label: React.ComponentType<any>;
   Button: React.ComponentType<any>;
-  ProgressStep?: React.ComponentType<any>;
+  ProgressStep: React.ComponentType<any>;
 }
 
 // Internationalization adapter interface

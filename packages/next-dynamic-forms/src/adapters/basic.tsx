@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig, FormStylingConfig } from '../types'
+import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
 
 // Basic adapter (no next-intl dependency, for other frameworks)

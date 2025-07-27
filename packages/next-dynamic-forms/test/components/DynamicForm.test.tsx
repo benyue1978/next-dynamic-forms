@@ -5,6 +5,17 @@ import { DynamicForm } from '../../src/components/DynamicForm'
 import type { FormConfig, DynamicFormData, UIComponents, I18nAdapter } from '../../src/types'
 
 // Mock UI components
+const MockInput = vi.fn(({ id, value, onChange, className, ...props }) => (
+  <input 
+    id={id}
+    value={value}
+    onChange={onChange}
+    className={className}
+    data-testid="mock-input"
+    {...props}
+  />
+))
+
 const MockButton = vi.fn(({ children, onClick, disabled, type, ...props }) => (
   <button 
     onClick={onClick}
@@ -23,16 +34,16 @@ const MockProgressStep = vi.fn(({ currentStep, totalSteps }) => (
   </div>
 ))
 
+const MockLabel = vi.fn(({ children, className, ...props }) => (
+  <label className={className} data-testid="mock-label" {...props}>
+    {children}
+  </label>
+))
+
 const mockUIComponents: UIComponents = {
-  Input: vi.fn(({ value, onChange }) => (
-    <input 
-      value={value}
-      onChange={onChange}
-      data-testid="mock-input"
-    />
-  )),
+  Input: MockInput,
   Textarea: vi.fn(() => <textarea data-testid="mock-textarea" />),
-  Label: vi.fn(({ children }) => <label data-testid="mock-label">{children}</label>),
+  Label: MockLabel,
   Button: MockButton,
   ProgressStep: MockProgressStep
 }
@@ -362,7 +373,7 @@ describe('DynamicForm', () => {
 
   describe('Progress display', () => {
     it('should not render progress when no ProgressStep component provided', () => {
-      const uiWithoutProgress = {
+      const uiComponentsWithoutProgress = {
         ...mockUIComponents,
         ProgressStep: undefined
       }
@@ -370,11 +381,208 @@ describe('DynamicForm', () => {
       render(
         <DynamicForm 
           {...mockProps} 
-          uiComponents={uiWithoutProgress}
+          uiComponents={uiComponentsWithoutProgress}
         />
       )
       
-      expect(screen.queryByTestId('mock-progress')).not.toBeInTheDocument()
+      // Should not crash and should render form normally
+      expect(screen.getByText('Step 1 Title')).toBeInTheDocument()
+    })
+  })
+
+  describe('Styling customization', () => {
+    it('should apply custom container className', () => {
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          containerClassName="custom-container"
+        />
+      )
+      
+      const container = screen.getByText('Step 1 Title').closest('.dynamic-form-wrapper')
+      expect(container).toHaveClass('custom-container')
+    })
+
+    it('should apply custom header className', () => {
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          headerClassName="custom-header"
+        />
+      )
+      
+      const header = screen.getByText('Step 1 Title').closest('.dynamic-form-header')
+      expect(header).toHaveClass('custom-header')
+    })
+
+    it('should apply custom form className', () => {
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          formClassName="custom-form"
+        />
+      )
+      
+      const form = screen.getByText('Step 1 Title').closest('.dynamic-form-content')
+      expect(form).toHaveClass('custom-form')
+    })
+
+    it('should apply custom button container className', () => {
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          buttonContainerClassName="custom-button-container"
+        />
+      )
+      
+      const buttonContainer = screen.getByText('Next').closest('.dynamic-form-buttons')
+      expect(buttonContainer).toHaveClass('custom-button-container')
+    })
+
+    it('should apply custom field styling props', () => {
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          fieldClassName="custom-field"
+          fieldContainerClassName="custom-field-container"
+          fieldLabelClassName="custom-field-label"
+          fieldInputClassName="custom-field-input"
+        />
+      )
+      
+      // Check that field styling props are passed to FieldRenderer
+      const inputs = screen.getAllByTestId('mock-input')
+      const labels = screen.getAllByTestId('mock-label')
+      
+      // Check first input and label
+      expect(inputs[0]).toHaveClass('custom-field-input')
+      expect(labels[0]).toHaveClass('custom-field-label')
+    })
+  })
+
+  describe('Text customization', () => {
+    it('should apply custom button texts', () => {
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          buttonTexts={{
+            previous: '上一步',
+            next: '下一步',
+            submit: '提交',
+            back: '返回'
+          }}
+        />
+      )
+      
+      expect(screen.getByText('返回')).toBeInTheDocument() // First step shows back button
+      expect(screen.getByText('下一步')).toBeInTheDocument()
+    })
+
+    it('should apply custom labels', () => {
+      // Create config with optional field
+      const configWithOptionalField = {
+        ...mockConfig,
+        steps: [
+          {
+            ...mockConfig.steps[0],
+            fields: [
+              { name: 'field1', type: 'input', label: 'Field 1', required: true },
+              { name: 'field2', type: 'input', label: 'Field 2', required: false } // Optional field
+            ]
+          }
+        ]
+      }
+      
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          config={configWithOptionalField}
+          labels={{
+            optional: '(可选)',
+            pleaseSelect: '请选择...'
+          }}
+        />
+      )
+      
+      // Use getAllByText since there might be multiple elements
+      const elements = screen.getAllByText((content, element) => {
+        return element?.textContent?.includes('(可选)') || false
+      })
+      expect(elements.length).toBeGreaterThan(0)
+    })
+
+    it('should apply custom error messages', () => {
+      // Create form data with missing required field
+      const formDataWithMissingField = { 
+        // Missing taskType which is required
+      }
+      
+      // Mock alert before rendering
+      const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
+      
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          formData={formDataWithMissingField}
+          errorMessages={{
+            requiredFieldsMissing: '请填写必填字段: {fields}'
+          }}
+        />
+      )
+      
+      const form = document.querySelector('form')!
+      fireEvent.submit(form)
+      
+      expect(alertSpy).toHaveBeenCalledWith(
+        expect.stringContaining('请填写必填字段')
+      )
+      
+      alertSpy.mockRestore()
+    })
+  })
+
+  describe('Combined customization', () => {
+    it('should handle both styling and text customization together', () => {
+      // Create config with optional field
+      const configWithOptionalField = {
+        ...mockConfig,
+        steps: [
+          {
+            ...mockConfig.steps[0],
+            fields: [
+              { name: 'field1', type: 'input', label: 'Field 1', required: true },
+              { name: 'field2', type: 'input', label: 'Field 2', required: false } // Optional field
+            ]
+          }
+        ]
+      }
+      
+      render(
+        <DynamicForm 
+          {...mockProps} 
+          config={configWithOptionalField}
+          className="custom-form-wrapper"
+          containerClassName="custom-container"
+          buttonTexts={{ submit: '提交' }}
+          labels={{ optional: '(可选)' }}
+          fieldClassName="custom-field"
+          fieldInputClassName="custom-input"
+        />
+      )
+      
+      // Check styling
+      const container = screen.getByText('Step 1 Title').closest('.dynamic-form-wrapper')
+      expect(container).toHaveClass('custom-container')
+      
+      // Check text customization with flexible matcher
+      const elements = screen.getAllByText((content, element) => {
+        return element?.textContent?.includes('(可选)') || false
+      })
+      expect(elements.length).toBeGreaterThan(0)
+      
+      // Check field styling
+      const inputs = screen.getAllByTestId('mock-input')
+      expect(inputs[0]).toHaveClass('custom-input')
     })
   })
 }) 

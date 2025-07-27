@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig, FormStylingConfig } from '../types'
+import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
 
 // Next.js + next-intl specific adapter (out-of-the-box)
@@ -44,7 +44,7 @@ export function createNextJSAdapter(uiComponents: UIComponents) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const nextIntl = require('next-intl')
       useTranslations = nextIntl.useTranslations
-    } catch (e) {
+    } catch {
       throw new Error('next-intl is required for createNextJSAdapter. Please install next-intl or use createBasicAdapter instead.')
     }
     
@@ -58,8 +58,9 @@ export function createNextJSAdapter(uiComponents: UIComponents) {
     
     let t = fallbackTranslator;
     try {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       t = useTranslations();
-    } catch (e) {
+    } catch {
       // If useTranslations throws due to missing context (e.g., in tests), use fallback
       // This can happen when NextIntlClientProvider context is not available
     }
@@ -91,7 +92,7 @@ export function createNextJSFormSystem(uiComponents: UIComponents) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const nextIntl = require('next-intl')
         useTranslations = nextIntl.useTranslations
-      } catch (e) {
+      } catch {
         throw new Error('next-intl is required for createNextJSFormSystem. Please install next-intl or use createBasicAdapter instead.')
       }
       
@@ -105,10 +106,10 @@ export function createNextJSFormSystem(uiComponents: UIComponents) {
       
       let t = fallbackTranslator;
       try {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         t = useTranslations();
-      } catch (e) {
+      } catch {
         // If useTranslations throws due to missing context (e.g., in tests), use fallback
-        // This can happen when NextIntlClientProvider context is not available
       }
       
       return {
