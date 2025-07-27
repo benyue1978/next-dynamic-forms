@@ -1,6 +1,6 @@
 {
   "name": "@benyue1978/next-dynamic-forms",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Configuration-driven dynamic forms with built-in i18n support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
