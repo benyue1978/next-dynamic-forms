@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig } from '../types'
+import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig, FormStylingConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
 
 // Basic adapter (no next-intl dependency, for other frameworks)
@@ -29,6 +29,14 @@ export function createBasicAdapter(uiComponents: UIComponents) {
     buttonTexts?: FormTextConfig['buttonTexts'];
     labels?: FormTextConfig['labels'];
     errorMessages?: FormTextConfig['errorMessages'];
+    // Optional field styling customization
+    fieldClassName?: string;
+    fieldContainerClassName?: string;
+    fieldLabelClassName?: string;
+    fieldInputClassName?: string;
+    fieldIconClassName?: string;
+    fieldRequiredClassName?: string;
+    fieldOptionalClassName?: string;
   }) {
     // Create a simple i18n adapter, using keys as default values
     const i18nAdapter: I18nAdapter = {

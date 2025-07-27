@@ -39,6 +39,14 @@ interface DynamicFormProps {
   errorMessages?: {
     requiredFieldsMissing?: string;
   };
+  // Optional field styling customization
+  fieldClassName?: string;
+  fieldContainerClassName?: string;
+  fieldLabelClassName?: string;
+  fieldInputClassName?: string;
+  fieldIconClassName?: string;
+  fieldRequiredClassName?: string;
+  fieldOptionalClassName?: string;
 }
 
 export function DynamicForm({
@@ -62,7 +70,14 @@ export function DynamicForm({
   buttonContainerClassName = '',
   buttonTexts = {},
   labels = {},
-  errorMessages = {}
+  errorMessages = {},
+  fieldClassName,
+  fieldContainerClassName,
+  fieldLabelClassName,
+  fieldInputClassName,
+  fieldIconClassName,
+  fieldRequiredClassName,
+  fieldOptionalClassName
 }: DynamicFormProps) {
   const { Button, ProgressStep } = uiComponents
   const { t } = i18n
@@ -162,6 +177,13 @@ export function DynamicForm({
                 uiComponents={uiComponents}
                 i18n={i18n}
                 labels={labels}
+                className={fieldClassName}
+                containerClassName={fieldContainerClassName}
+                labelClassName={fieldLabelClassName}
+                inputClassName={fieldInputClassName}
+                iconClassName={fieldIconClassName}
+                requiredClassName={fieldRequiredClassName}
+                optionalClassName={fieldOptionalClassName}
               />
             ))}
 

@@ -64,4 +64,20 @@ export interface FormTextConfig {
   errorMessages?: {
     requiredFieldsMissing?: string;
   };
+}
+
+// Form styling configuration interface
+export interface FormStylingConfig {
+  className?: string;
+  containerClassName?: string;
+  headerClassName?: string;
+  formClassName?: string;
+  buttonContainerClassName?: string;
+  fieldClassName?: string;
+  fieldContainerClassName?: string;
+  fieldLabelClassName?: string;
+  fieldInputClassName?: string;
+  fieldIconClassName?: string;
+  fieldRequiredClassName?: string;
+  fieldOptionalClassName?: string;
 } 

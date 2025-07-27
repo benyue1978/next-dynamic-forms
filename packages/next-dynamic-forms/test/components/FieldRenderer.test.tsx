@@ -111,7 +111,7 @@ describe('FieldRenderer', () => {
         />
       )
 
-      expect(screen.getByText('Optional')).toBeInTheDocument()
+      expect(screen.getByText('(Optional)')).toBeInTheDocument()
       expect(screen.queryByText('*')).not.toBeInTheDocument()
     })
 

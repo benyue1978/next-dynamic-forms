@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig } from '../types'
+import { UIComponents, I18nAdapter, DynamicFormData, FormConfig, FormTextConfig, FormStylingConfig } from '../types'
 import { DynamicForm } from '../components/DynamicForm'
 
 // Next.js + next-intl specific adapter (out-of-the-box)
@@ -29,6 +29,14 @@ export function createNextJSAdapter(uiComponents: UIComponents) {
     buttonTexts?: FormTextConfig['buttonTexts'];
     labels?: FormTextConfig['labels'];
     errorMessages?: FormTextConfig['errorMessages'];
+    // Optional field styling customization
+    fieldClassName?: string;
+    fieldContainerClassName?: string;
+    fieldLabelClassName?: string;
+    fieldInputClassName?: string;
+    fieldIconClassName?: string;
+    fieldRequiredClassName?: string;
+    fieldOptionalClassName?: string;
   }) {
     // Dynamic import of next-intl to avoid bundling issues
     let useTranslations: any;
